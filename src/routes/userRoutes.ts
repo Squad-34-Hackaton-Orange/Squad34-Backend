@@ -17,7 +17,7 @@ router.get('/:userId', UserController.GetUser);
 router.put('/:UserId', UserController.updateUserById)
 
 //DELETE
-router.delete('/')
+router.delete('/:UserId', UserController.DeleteUserById)
 
 
 

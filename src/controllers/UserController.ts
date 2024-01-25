@@ -205,4 +205,39 @@ export class UserController {
       });
     }
   }
+
+  static async DeleteUserById(req: Request, res: Response){
+    const { UserId } = req.params;
+
+    const getUser = await prisma.user.findUnique({
+      where: { id: Number(UserId) },
+    });
+
+    if (!getUser) {
+      res.status(404).send({
+        message: "User Notfound.",
+      });
+      return;
+    }
+
+    try {await prisma.user.update({
+      where: { id: Number(UserId) },
+  data: {deletedAt : new Date()},
+    });
+
+    res.status(200).send({
+      message: "Deleted User.",
+    });
+
+    return;
+      
+    } catch (error) {
+      if(error instanceof PrismaError.PrismaClientKnownRequestError){
+        res.status(500).send({
+          message: "User Updated Error.",
+        });
+      }
+      throw error;
+    }
+  }
 }
