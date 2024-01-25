@@ -234,7 +234,7 @@ export class UserController {
     } catch (error) {
       if(error instanceof PrismaError.PrismaClientKnownRequestError){
         res.status(500).send({
-          message: "User Updated Error.",
+          message: "User Deleted Error.",
         });
       }
       throw error;
