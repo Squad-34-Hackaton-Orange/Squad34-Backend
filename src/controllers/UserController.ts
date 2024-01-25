@@ -1,6 +1,8 @@
 import {Request, Response, NextFunction} from 'express';
 import {PrismaError, prisma} from '../utils/prisma'
 import bcrypt from 'bcrypt'
+import fs from 'fs';
+import JWT from "jsonwebtoken"
 
 
 export class UserController {
@@ -76,6 +78,64 @@ export class UserController {
       }
 
       throw error
+    }
+  }
+
+
+  static async LoginUser (req: Request, res: Response){
+    const { email, password } = req.body;
+
+    try {
+      // CHECA SE RECEBEMOS OS DADOS
+      if (!email && !password) {
+        res.status(400).send({
+          message: "Email ou password inválidos",
+        });
+
+        return;
+      }
+
+      const user = await prisma.user.findFirst({
+        where: {
+          email,
+        },
+      });
+
+      if (!user) {
+        res.status(404).send({
+          message: "Usuário inexistente",
+        });
+        return;
+      }
+
+      const checarSenha = bcrypt.compareSync(password, user.password);
+
+      if (!checarSenha) {
+        res.status(401).send({
+          message: "E-mail ou Senha Incorreta",
+        });
+        return;
+      }
+
+      const privateKey = fs.readFileSync("./.env").toString();
+
+      const token = JWT.sign(
+        {
+          id: user.id,
+        },
+        privateKey,
+        { expiresIn: "1h" }
+      );
+
+      const userAndToken = user && token;
+
+      res.json(userAndToken);
+    } catch (error) {
+      if (error instanceof PrismaError.PrismaClientKnownRequestError) {
+        res.status(500).send({ message: "Internal Error" });
+      }
+
+      throw error;
     }
   }
 
