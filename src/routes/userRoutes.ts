@@ -9,7 +9,7 @@ router.post('/sign', UserController.CreateUser)
 // localhost.com:8080/user/sign
 
 //READ
-router.get('/')
+router.get('/:userId', UserController.GetUser);
 
 //UPDATE
 router.put('/:UserId', UserController.updateUserById)

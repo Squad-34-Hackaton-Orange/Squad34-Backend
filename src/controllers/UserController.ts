@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { PrismaError, prisma } from "../utils/prisma";
 import bcrypt from "bcrypt";
-import { PrismaClient } from "@prisma/client";
+
 
 export class UserController {
   static async CreateUser(req: Request, res: Response) {
@@ -62,6 +62,38 @@ export class UserController {
       res.status(201).send({
         message: "User Created Sucessfuly.",
       });
+    } catch (error) {
+      if (error instanceof PrismaError.PrismaClientKnownRequestError) {
+        res.status(500).send(error);
+      }
+
+      throw error;
+    }
+  }
+
+  static async GetUser(req: Request, res: Response) {
+    try {
+      const { userId } = req.params;
+      const user = await prisma.user.findFirst({
+        where: { id: Number(userId)}, 
+        select: {name: true,
+                country: true,
+                last_name: true,
+                email: true,
+                password: false,
+                createdAt: false,
+                updatedAt: false,
+                deletedAt: false,}
+      });
+
+      if (!user) {
+        res.status(404).send({
+          message: 'User not found',
+        });
+        return;
+      }
+      
+      res.status(200).json(user);
     } catch (error) {
       if (error instanceof PrismaError.PrismaClientKnownRequestError) {
         res.status(500).send(error);
