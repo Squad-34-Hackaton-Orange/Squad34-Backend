@@ -12,7 +12,7 @@ router.post('/sign', UserController.CreateUser)
 router.get('/')
 
 //UPDATE
-router.put('/')
+router.put('/:UserId', UserController.updateUserById)
 
 //DELETE
 router.delete('/')
