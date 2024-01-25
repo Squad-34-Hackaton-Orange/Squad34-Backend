@@ -11,10 +11,10 @@ router.post('/login', UserController.LoginUser, authUser)
 // localhost.com:8080/user/sign
 
 //READ
-router.get('/')
+router.get('/:userId', UserController.GetUser);
 
 //UPDATE
-router.put('/')
+router.put('/:UserId', UserController.updateUserById)
 
 //DELETE
 router.delete('/')
