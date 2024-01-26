@@ -11,10 +11,19 @@ router.post('/', ProjectController.CreateProject)
 //READ
 router.get('/user/:userId', ProjectController.GetAllUserProjects);
 
-//UPDATE
-router.put('/:projectId', ProjectController.updateProject)
+
 
 //DELETE
 //router.delete('/:UserId', UserController.DeleteUserById)
+
+
+
+
+
+
+
+//UPDATE
+router.put('/:projectId', ProjectController.updateProject)
+
 
 export default router
