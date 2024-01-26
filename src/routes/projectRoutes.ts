@@ -11,6 +11,8 @@ router.post('/', ProjectController.CreateProject)
 //READ
 router.get('/user/:userId', ProjectController.GetAllUserProjects);
 
+router.get("/:projectId", ProjectController.GetProjectById);
+
 //UPDATE
 //router.put('/:UserId', UserController.updateUserById)
 

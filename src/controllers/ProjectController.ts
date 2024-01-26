@@ -68,4 +68,38 @@ export class ProjectController{
 
     }
 
+    static async GetProjectById(req: Request, res: Response): Promise<void> {
+
+
+        const { projectId } = req.params;
+    
+        try {
+          const project = await prisma.project.findUnique({
+            where: {
+                id: Number(projectId),
+            },
+          });
+    
+          if (!project) {
+            res.status(404).json({
+              message: "Project not found",
+            });
+            return;
+          }
+    
+          res.status(200).json(project);
+
+        } catch (error) {
+          if (error instanceof PrismaError.PrismaClientKnownRequestError) {
+            res.status(500).send(error);
+          }
+    
+          throw error;
+        }
+      }
+    
+
+
+
+
 }
