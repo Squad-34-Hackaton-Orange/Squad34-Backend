@@ -1,4 +1,4 @@
-import {Router} from "express";
+import { Router } from "express";
 import { ProjectController } from "../controllers/ProjectController";
 
 const router = Router();
@@ -11,19 +11,14 @@ router.post('/', ProjectController.CreateProject)
 //READ
 router.get('/user/:userId', ProjectController.GetAllUserProjects);
 
-
+// READ ALL
+router.get('/', ProjectController.GetAllProjects);
 
 //DELETE
-//router.delete('/:UserId', UserController.DeleteUserById)
-
-
-
-
-
-
+router.delete('/:projectId', ProjectController.DeleteProject);
 
 //UPDATE
-router.put('/:projectId', ProjectController.updateProject)
+router.put('/:projectId', ProjectController.updateProject);
 
 
 export default router
