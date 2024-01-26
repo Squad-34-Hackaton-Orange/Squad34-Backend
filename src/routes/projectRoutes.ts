@@ -12,7 +12,7 @@ router.post('/', ProjectController.CreateProject)
 router.get('/user/:userId', ProjectController.GetAllUserProjects);
 
 //UPDATE
-//router.put('/:UserId', UserController.updateUserById)
+router.put('/:projectId', ProjectController.updateProject)
 
 //DELETE
 //router.delete('/:UserId', UserController.DeleteUserById)
