@@ -15,12 +15,12 @@ model User {
   id        Int       @id @default(autoincrement())
   name      String    @db.VarChar(100)
   last_name String    @db.VarChar(100)
-  email     String    @db.VarChar(255)
+  email     String    @unique @db.VarChar(255)
   password  String    @db.VarChar(255)
   country   String?   @default("Brasil") @db.VarChar(50)
   createdAt DateTime
-  updatedAt DateTime
-  deletedAt DateTime
+  updatedAt DateTime?
+  deletedAt DateTime?
   Project   Project[]
 }
 

@@ -143,6 +143,7 @@ export class UserController {
           country: true,
           last_name: true,
           email: true,
+          Project: true,
           password: false,
           createdAt: false,
           updatedAt: false,
@@ -158,6 +159,9 @@ export class UserController {
       }
 
       res.status(200).json(user);
+
+      return user.Project
+
     } catch (error) {
       if (error instanceof PrismaError.PrismaClientKnownRequestError) {
         res.status(500).send(error);
