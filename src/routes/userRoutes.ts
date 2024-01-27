@@ -21,5 +21,4 @@ router.delete('/:UserId', authUser, UserController.DeleteUserById)
 
 
 
-
 export default router

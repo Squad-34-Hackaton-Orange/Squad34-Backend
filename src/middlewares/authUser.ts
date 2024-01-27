@@ -32,7 +32,7 @@ export default async function (req: Request, res: Response, next: NextFunction) 
        
         const decoded = jwt.verify(token, privateKey) as JwtPayload;
 
-        const userIdFromToken = decoded.id;
+        const userIdFromToken = decoded.id;        
         const {userId} = req.params;
 
         if (userIdFromToken !== userId) {

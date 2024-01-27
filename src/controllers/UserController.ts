@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { PrismaError, prisma } from "../utils/prisma";
 import bcrypt from "bcrypt";
 import fs from "fs";
-import JWT from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import { getPrivateKey } from "../middlewares/authUser";
 
 export class UserController {
   static async CreateUser(req: Request, res: Response) {
@@ -17,6 +18,7 @@ export class UserController {
 
       return;
     }
+    
 
     const checkUserExist = await prisma.user.findFirst({
       where: {
@@ -53,7 +55,7 @@ export class UserController {
           name,
           last_name,
           email,
-          password,
+          password: hash,
           createdAt: new Date(),
           updatedAt: new Date(),
           deletedAt: new Date(),
@@ -75,11 +77,13 @@ export class UserController {
   static async LoginUser(req: Request, res: Response) {
     const { email, password } = req.body;
 
+    console.log(email, password)
+
     try {
       // CHECA SE RECEBEMOS OS DADOS
       if (!email && !password) {
         res.status(400).send({
-          message: "Email ou password inválidos",
+          message: "Email ou Senha inválidos",
         });
 
         return;
@@ -91,10 +95,12 @@ export class UserController {
         },
         select: {
           id: true,
+          name: true,
           email: true,
-          password: true,          
+          password: true,
         },
       });
+
 
       if (!user) {
         res.status(404).send({
@@ -112,18 +118,27 @@ export class UserController {
         return;
       }
 
-      const privateKey = fs.readFileSync("./.env").toString();
-
-      const token = JWT.sign(
-        {
-          id: user.id,
-        },
-        privateKey,
-        { expiresIn: "1h" }
-      );
+      if (checarSenha) {
+        const privateKey = getPrivateKey();
 
 
-      res.json(token);
+        const token = jwt.sign(
+          { id: user.id.toString(), name: user.name, email: user.email },
+          privateKey,
+          {
+            expiresIn: "1h",
+          }
+        );
+
+        res.json({
+          user: {
+            name: user.name,
+            email: user.email,
+            id: user.id,
+          },
+          token: token,
+        });
+      }
     } catch (error) {
       if (error instanceof PrismaError.PrismaClientKnownRequestError) {
         res.status(500).send({ message: "Internal Error" });
@@ -160,8 +175,7 @@ export class UserController {
 
       res.status(200).json(user);
 
-      return user.Project
-
+      return user.Project;
     } catch (error) {
       if (error instanceof PrismaError.PrismaClientKnownRequestError) {
         res.status(500).send(error);
@@ -210,7 +224,7 @@ export class UserController {
     }
   }
 
-  static async DeleteUserById(req: Request, res: Response){
+  static async DeleteUserById(req: Request, res: Response) {
     const { UserId } = req.params;
 
     const getUser = await prisma.user.findUnique({
@@ -224,19 +238,19 @@ export class UserController {
       return;
     }
 
-    try {await prisma.user.update({
-      where: { id: Number(UserId) },
-  data: {deletedAt : new Date()},
-    });
+    try {
+      await prisma.user.update({
+        where: { id: Number(UserId) },
+        data: { deletedAt: new Date() },
+      });
 
-    res.status(200).send({
-      message: "Deleted User.",
-    });
+      res.status(200).send({
+        message: "Deleted User.",
+      });
 
-    return;
-      
+      return;
     } catch (error) {
-      if(error instanceof PrismaError.PrismaClientKnownRequestError){
+      if (error instanceof PrismaError.PrismaClientKnownRequestError) {
         res.status(500).send({
           message: "User Deleted Error.",
         });
