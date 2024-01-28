@@ -27,7 +27,6 @@ export default async function (req: Request, res: Response, next: NextFunction) 
 
         if (!token) {
             return res.status(401).json({ message: "The token wasn't provided" });
-            return;
         }       
        
         const decoded = jwt.verify(token, privateKey) as JwtPayload;

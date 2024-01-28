@@ -117,7 +117,7 @@ export class ProjectController {
         }
     };
 
-    static async updateProject(req: Request, res: Response) {
+    static async UpdateProject(req: Request, res: Response) {
         const { projectId } = req.params;
 
         // CHECA PROJET EXISTE NO BD
@@ -170,8 +170,6 @@ export class ProjectController {
     }
     
     static async GetProjectById(req: Request, res: Response): Promise<void> {
-
-
         const { projectId } = req.params;
     
         try {
