@@ -1,0 +1,58 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Orange Juice Portfólio API (Squad 34)",
+        "description": "Essa API tem como objetivo a manipulação de usuários e projetos da plataforma Orange Juice Portfólio.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080"
+        }
+    ],
+    "paths": {
+        "/user/sign": {
+            "post": {
+                "summary": "Cadastro de usuário",
+                "description": "Essa rota é responsável por cadastrar um novo usuário.",
+                "tags": ["Users"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "name": "João",
+                                        "last_name": "Oliveira",
+                                        "email": "joaooliveira@email.com",
+                                        "password": "joao123."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": { "description": "Invalid Data" },
+                    "409": { "description": "User Already Exist." }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string"},
+                    "last_name": {"type": "string"},
+                    "email": {"type": "string"},
+                    "password": {"type": "string"}
+                }
+            }
+        }
+    }
+}
