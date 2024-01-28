@@ -6,7 +6,7 @@ import swaggerDocs from './swagger.json'
 
 export function routes(app:Express){
 
-  app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
+  app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocs, {explorer: true}))
   app.use('/user', userRoutes)
   app.use('/project', projectRoutes)
   

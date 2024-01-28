@@ -6,10 +6,8 @@ const router = Router();
 //CREATE
 router.post('/', ProjectController.CreateProject)
 
-// localhost.com:8080/project/
-
 //READ
-router.get('/user/:userId', ProjectController.GetAllUserProjects);
+router.get('/?user=:userId', ProjectController.GetAllUserProjects);
 
 router.get("/:projectId", ProjectController.GetProjectById);
 

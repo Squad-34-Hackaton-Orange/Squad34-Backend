@@ -14,10 +14,10 @@ router.post('/login', UserController.LoginUser)
 router.get('/:userId', authUser, UserController.GetUser);
 
 //UPDATE
-router.put('/:UserId', authUser, UserController.updateUserById)
+router.put('/:userId', authUser, UserController.updateUserById)
 
 //DELETE
-router.delete('/:UserId', authUser, UserController.DeleteUserById)
+router.delete('/:userId', authUser, UserController.DeleteUserById)
 
 
 
