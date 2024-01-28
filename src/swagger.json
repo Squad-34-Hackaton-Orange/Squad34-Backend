@@ -223,6 +223,27 @@
                                 }
                     }
                 }
+            },
+            "/project/all": {
+                "get": {
+                    "summary": "Recuperar todos os projetos cadastrados",
+                    "description": "Essa rota é responsável por fazer a recuperação de todos os projetos.",
+                    "tags": ["Projects"],
+                    "security": [{"bearerAuth": []}],
+                    "responses": {
+                        "500": { "description": "Internal Server Error." },
+                        "200": { "description": "OK.",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                                "type": "object",
+                                                "$ref": "#/components/schemas/Project"
+                                            }
+                                        }
+                                    }
+                                }
+                    }
+                }
             }
             
         },
