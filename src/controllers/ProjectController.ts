@@ -7,7 +7,7 @@ export class ProjectController {
 
         if (!title || !description || !link || !id_user) {
             res.status(400).send({
-                message: "Invalid Data",
+                message: "Invalid Data.",
             });
 
             return;
@@ -19,11 +19,11 @@ export class ProjectController {
                     title,
                     description,
                     link,
-                    id_user,
+                    id_user: Number(id_user),
                 },
             });
 
-            res.status(201);
+            res.status(201).send({message: "Project Created Successfully."});
         } catch (error) {
             if (error instanceof PrismaError.PrismaClientKnownRequestError) {
                 res.status(500).send(error);
@@ -34,7 +34,23 @@ export class ProjectController {
     }
 
     static async GetAllUserProjects(req: Request, res: Response): Promise<void> {
-        const { userId } = req.params;
+        const { userId } = req.query;
+
+        const user = await prisma.user.findFirst({
+            where: {
+              id: Number(userId),
+            },
+            select: {
+              id: true,
+            },
+        });
+
+        if (!user) {
+            res.status(404).send({
+              message: "User doesn't exist.",
+            });
+            return;
+          }
 
         try {
             const userProjects = await prisma.project.findMany({
@@ -152,35 +168,6 @@ export class ProjectController {
             throw error;
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     
     static async GetProjectById(req: Request, res: Response): Promise<void> {
 
