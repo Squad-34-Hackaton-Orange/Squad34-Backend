@@ -120,7 +120,7 @@ export class ProjectController {
     static async UpdateProject(req: Request, res: Response) {
         const { projectId } = req.params;
 
-        // CHECA PROJET EXISTE NO BD
+        // CHECA SE PROJETO EXISTE NO BD
 
         const project = await prisma.project.findUnique({
             where: {
@@ -154,7 +154,7 @@ export class ProjectController {
             });
 
             res.status(200).send({
-                message: "Project Updated Sucessfuly.",
+                message: "Project Updated Sucessfully.",
             });
 
             return;
@@ -181,7 +181,7 @@ export class ProjectController {
     
           if (!project) {
             res.status(404).json({
-              message: "Project not found",
+              message: "Project not found.",
             });
             return;
           }

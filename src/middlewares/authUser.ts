@@ -31,8 +31,19 @@ export default async function (req: Request, res: Response, next: NextFunction) 
        
         const decoded = jwt.verify(token, privateKey) as JwtPayload;
 
-        const userIdFromToken = decoded.id;        
-        const {userId} = req.params;
+        const userIdFromToken = decoded.id;
+
+        let userId;
+
+        if(req.params.userId){
+            userId = req.params.userId;
+        }
+        else if(req.body.id_user){
+            userId = req.body.id_user;
+        }
+        else{
+            userId = req.query.userId;
+        }
 
         if (userIdFromToken !== userId) {
             return res.status(403).json({ message: "You don't have permission to update this user" });
