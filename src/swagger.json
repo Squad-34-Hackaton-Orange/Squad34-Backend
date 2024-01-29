@@ -224,11 +224,17 @@
                     }
                 }
             },
-            "/project/all": {
+            "/project/{userId}/all": {
                 "get": {
                     "summary": "Recuperar todos os projetos cadastrados",
                     "description": "Essa rota é responsável por fazer a recuperação de todos os projetos.",
                     "tags": ["Projects"],
+                    "parameters": [{
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID do usuário.",
+                        "required": "true"
+                    }],
                     "security": [{"bearerAuth": []}],
                     "responses": {
                         "500": { "description": "Internal Server Error." },
@@ -244,8 +250,98 @@
                                 }
                     }
                 }
+            },
+            "/project/{userId}/{projectId}": {
+                "get": {
+                    "summary": "Recuperar um projeto do usuário.",
+                    "description": "Essa rota é responsável por fazer a recuperação de um projeto específico do usuário.",
+                    "tags": ["Projects"],
+                    "parameters": [{
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID do usuário.",
+                        "required": "true"
+                    },
+                    {"name": "projectId",
+                    "in": "path",
+                    "description":"ID do projeto.",
+                    "required": "true"}],
+                    "security": [{"bearerAuth": []}],
+                    "responses": {
+                        "404": { "description": "Project not found." },
+                        "500": { "description": "Internal Server Error." },
+                        "200": { "description": "OK.",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                                "type": "object",
+                                                "$ref": "#/components/schemas/Project"
+                                            }
+                                        }
+                                    }
+                                }
+                    }
+                },
+                "delete": {
+                    "summary": "Excluir um projeto do usuário.",
+                    "description": "Essa rota é responsável por fazer a deleção de um projeto específico do usuário.",
+                    "tags": ["Projects"],
+                    "parameters": [{
+                        "name": "userId",
+                        "in": "path",
+                        "description":"ID do usuário.",
+                        "required": "true"
+                    },
+                    {"name": "projectId",
+                    "in": "path",
+                    "description":"ID do projeto.",
+                    "required": "true"}],
+                    "security": [{"bearerAuth": []}],
+                    "responses": {
+                        "404": { "description": "Project not found." },
+                        "500": { "description": "Internal Server Error." },
+                        "200": { "description": "Project Deleted."}
+                    }
+                }
+            },
+            "/project/{projectId}": {
+                "put": {
+                    "summary": "Atualização de projeto",
+                    "description": "Essa rota é responsável por fazer a atualização de um projeto.",
+                    "tags": ["Projects"],
+                    "security": [{"bearerAuth": []}],
+                    "parameters": [{
+                        "name": "projectId",
+                        "in": "path",
+                        "description": "ID do projeto.",
+                        "required": "true"
+                    }],
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Project"
+                                },
+                                "examples": {
+                                    "project": {
+                                        "value": {
+                                            "title": "Meu novo site",
+                                            "description": "Meu novo site desenvolvido com HTML, CSS e Javascript.",
+                                            "link": "https://meunovosite.com.br",
+                                            "id_user": "5"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "404": { "description": "Project not found." },
+                        "500": { "description": "Internal Server Error." },
+                        "200": { "description": "Project Updated Sucessfully."}
+                    }
+                }
             }
-            
         },
 
     "components": {
@@ -266,7 +362,8 @@
                     "title": {"type": "string"},
                     "description": {"type": "string"},
                     "link": {"type": "string"},
-                    "date_post": {"type": "string"}
+                    "date_post": {"type": "string"},
+                    "id_user": {"type": "number"}
                 }
             }
         },
