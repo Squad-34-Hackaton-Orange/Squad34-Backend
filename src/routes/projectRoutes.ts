@@ -1,26 +1,25 @@
 import { Router } from "express";
 import { ProjectController } from "../controllers/ProjectController";
+import authUser from "../middlewares/authUser";
 
 const router = Router();
 
 //CREATE
-router.post('/', ProjectController.CreateProject)
-
-// localhost.com:8080/project/
+router.post('/', authUser, ProjectController.CreateProject)
 
 //READ
-router.get('/user/:userId', ProjectController.GetAllUserProjects);
-
-router.get("/:projectId", ProjectController.GetProjectById);
+router.get('/:userId?', authUser, ProjectController.GetAllUserProjects);
 
 // READ ALL
-router.get('/', ProjectController.GetAllProjects);
+router.get('/:userId/all', authUser, ProjectController.GetAllProjects);
+
+router.get("/:userId/:projectId", authUser, ProjectController.GetProjectById);
 
 //DELETE
-router.delete('/:projectId', ProjectController.DeleteProject);
+router.delete('/:userId/:projectId', authUser, ProjectController.DeleteProject);
 
 //UPDATE
-router.put('/:projectId', ProjectController.updateProject);
+router.put('/:projectId', authUser, ProjectController.UpdateProject);
 
 
 export default router

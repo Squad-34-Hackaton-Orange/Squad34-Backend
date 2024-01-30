@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { PrismaError, prisma } from "../utils/prisma";
 import bcrypt from "bcrypt";
-import fs from "fs";
+
 import jwt from "jsonwebtoken";
 import { getPrivateKey } from "../middlewares/authUser";
 
@@ -9,11 +9,9 @@ export class UserController {
   static async CreateUser(req: Request, res: Response) {
     const { name, last_name, email, password } = req.body;
 
-    // TODO: VERIFICAÇÕES
     if (!name || !last_name || !email || !password) {
-      // TODO: TRATAR MENSAGEM
       res.status(400).send({
-        menssage: "Invalid Data",
+        message: "Invalid Data",
       });
 
       return;
@@ -31,7 +29,7 @@ export class UserController {
 
     if (checkUserExist) {
       res.status(409).send({
-        menssage: "User Already Exist.",
+        message: "User Already Exist.",
       });
 
       return;
@@ -43,7 +41,7 @@ export class UserController {
 
     if (!hash) {
       res.status(500).send({
-        menssage: "Internal Server Error",
+        message: "Internal Server Error.",
       });
     }
 
@@ -63,7 +61,7 @@ export class UserController {
       });
 
       res.status(201).send({
-        message: "User Created Sucessfuly.",
+        message: "User Created Successfully.",
       });
     } catch (error) {
       if (error instanceof PrismaError.PrismaClientKnownRequestError) {
@@ -83,7 +81,7 @@ export class UserController {
       // CHECA SE RECEBEMOS OS DADOS
       if (!email && !password) {
         res.status(400).send({
-          message: "Email ou Senha inválidos",
+          message: "Invalid email or password.",
         });
 
         return;
@@ -104,7 +102,7 @@ export class UserController {
 
       if (!user) {
         res.status(404).send({
-          message: "Usuário inexistente",
+          message: "User doesn't exist.",
         });
         return;
       }
@@ -113,7 +111,7 @@ export class UserController {
 
       if (!checarSenha) {
         res.status(401).send({
-          message: "E-mail ou Senha Incorreta",
+          message: "Incorrect email or password.",
         });
         return;
       }
@@ -141,7 +139,7 @@ export class UserController {
       }
     } catch (error) {
       if (error instanceof PrismaError.PrismaClientKnownRequestError) {
-        res.status(500).send({ message: "Internal Error" });
+        res.status(500).send({ message: "Internal Error." });
 
         throw error;
       }
@@ -186,16 +184,16 @@ export class UserController {
   }
 
   static async updateUserById(req: Request, res: Response): Promise<void> {
-    const { UserId } = req.params;
+    const { userId } = req.params;
     const { name, last_name, email, country } = req.body;
 
     const getUser = await prisma.user.findUnique({
-      where: { id: Number(UserId) },
+      where: { id: Number(userId) },
     });
 
     if (!getUser) {
       res.status(404).send({
-        message: "User Notfound.",
+        message: "User not found.",
       });
       return;
     }
@@ -210,42 +208,42 @@ export class UserController {
 
     try {
       await prisma.user.update({
-        where: { id: Number(UserId) },
+        where: { id: Number(userId) },
         data: updatedUser,
       });
 
       res.status(200).send({
-        message: "User Updated Sucessfuly.",
+        message: "User Updated Sucessfully.",
       });
     } catch (error) {
       res.status(500).send({
-        message: "User Updated Error.",
+        message: "User Update Error.",
       });
     }
   }
 
   static async DeleteUserById(req: Request, res: Response) {
-    const { UserId } = req.params;
+    const { userId } = req.params;
 
     const getUser = await prisma.user.findUnique({
-      where: { id: Number(UserId) },
+      where: { id: Number(userId) },
     });
 
     if (!getUser) {
       res.status(404).send({
-        message: "User Notfound.",
+        message: "User not found.",
       });
       return;
     }
 
     try {
       await prisma.user.update({
-        where: { id: Number(UserId) },
+        where: { id: Number(userId) },
         data: { deletedAt: new Date() },
       });
 
       res.status(200).send({
-        message: "Deleted User.",
+        message: "User Deleted Successfully.",
       });
 
       return;

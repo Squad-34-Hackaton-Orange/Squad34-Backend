@@ -7,7 +7,7 @@ export class ProjectController {
 
         if (!title || !description || !link || !id_user) {
             res.status(400).send({
-                message: "Invalid Data",
+                message: "Invalid Data.",
             });
 
             return;
@@ -19,11 +19,11 @@ export class ProjectController {
                     title,
                     description,
                     link,
-                    id_user,
+                    id_user: Number(id_user),
                 },
             });
 
-            res.status(201);
+            res.status(201).send({message: "Project Created Successfully."});
         } catch (error) {
             if (error instanceof PrismaError.PrismaClientKnownRequestError) {
                 res.status(500).send(error);
@@ -34,7 +34,23 @@ export class ProjectController {
     }
 
     static async GetAllUserProjects(req: Request, res: Response): Promise<void> {
-        const { userId } = req.params;
+        const { userId } = req.query;
+
+        const user = await prisma.user.findFirst({
+            where: {
+              id: Number(userId),
+            },
+            select: {
+              id: true,
+            },
+        });
+
+        if (!user) {
+            res.status(404).send({
+              message: "User doesn't exist.",
+            });
+            return;
+          }
 
         try {
             const userProjects = await prisma.project.findMany({
@@ -101,10 +117,10 @@ export class ProjectController {
         }
     };
 
-    static async updateProject(req: Request, res: Response) {
+    static async UpdateProject(req: Request, res: Response) {
         const { projectId } = req.params;
 
-        // CHECA PROJET EXISTE NO BD
+        // CHECA SE PROJETO EXISTE NO BD
 
         const project = await prisma.project.findUnique({
             where: {
@@ -138,7 +154,7 @@ export class ProjectController {
             });
 
             res.status(200).send({
-                message: "Project Updated Sucessfuly.",
+                message: "Project Updated Sucessfully.",
             });
 
             return;
@@ -152,39 +168,8 @@ export class ProjectController {
             throw error;
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     
     static async GetProjectById(req: Request, res: Response): Promise<void> {
-
-
         const { projectId } = req.params;
     
         try {
@@ -196,7 +181,7 @@ export class ProjectController {
     
           if (!project) {
             res.status(404).json({
-              message: "Project not found",
+              message: "Project not found.",
             });
             return;
           }
