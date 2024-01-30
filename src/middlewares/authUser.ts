@@ -1,9 +1,19 @@
 import {Request, Response, NextFunction} from "express"
-import JWT from "jsonwebtoken"
+import jwt, {Secret, JwtPayload} from "jsonwebtoken"
 import fs from 'fs';
 
+export interface CustomRequest extends Request {
+    token: string | JwtPayload;
+}
+
+export const getPrivateKey = () => {
+    const PRIVATE_KEY: Secret = fs.readFileSync('./.env', 'utf8');
+
+    return PRIVATE_KEY;
+}
 
 export default async function (req: Request, res: Response, next: NextFunction) {
+
     const authHeader = req.headers.authorization
     if (!authHeader) {
         return res.status(401).json({message: "No token provided"})
@@ -11,17 +21,23 @@ export default async function (req: Request, res: Response, next: NextFunction) 
 
         
     try {
+        const privateKey = getPrivateKey()
 
-        const privateKey = await fs.promises.readFile('./.env', 'utf-8');
+        const token = req.header('Authorization')?.replace('Bearer ', '');
 
-        const [, token] = authHeader.split(" ");
+        if (!token) {
+            return res.status(401).json({ message: "The token wasn't provided" });
+            return;
+        }       
+       
+        const decoded = jwt.verify(token, privateKey) as JwtPayload;
 
-        const decoded = JWT.verify(token, privateKey, { algorithms: ['RS256']});
+        const userIdFromToken = decoded.id;        
+        const {userId} = req.params;
 
-        const { id } = decoded as Token.TokenID;
-
-        req.userID = id
-
+        if (userIdFromToken !== userId) {
+            return res.status(403).json({ message: "You don't have permission to update this user" });
+        }
     
         next();
     } catch (error) {

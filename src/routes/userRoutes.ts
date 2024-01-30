@@ -6,19 +6,18 @@ const router = Router();
 
 //CREATE
 router.post('/sign', UserController.CreateUser)
-router.post('/login', UserController.LoginUser, authUser)
+router.post('/login', UserController.LoginUser)
 
 // localhost.com:8080/user/sign
 
 //READ
-router.get('/:userId', UserController.GetUser);
+router.get('/:userId', authUser, UserController.GetUser);
 
 //UPDATE
-router.put('/:UserId', UserController.updateUserById)
+router.put('/:UserId', authUser, UserController.updateUserById)
 
 //DELETE
-router.delete('/:UserId', UserController.DeleteUserById)
-
+router.delete('/:UserId', authUser, UserController.DeleteUserById)
 
 
 
