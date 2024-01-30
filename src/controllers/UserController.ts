@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { PrismaError, prisma } from "../utils/prisma";
 import bcrypt from "bcrypt";
+
 import jwt from "jsonwebtoken";
 import { getPrivateKey } from "../middlewares/authUser";
 
@@ -73,6 +74,8 @@ export class UserController {
 
   static async LoginUser(req: Request, res: Response) {
     const { email, password } = req.body;
+
+    console.log(email, password)
 
     try {
       // CHECA SE RECEBEMOS OS DADOS
