@@ -1,13 +1,12 @@
 import { Router } from "express";
 import { ProjectController } from "../controllers/ProjectController";
 import authUser from "../middlewares/authUser";
-import validate from "../middlewares/validation";
-import projectSchema from "../utils/projectValidationSchema";
+import validateProject from "../middlewares/projectValidation";
 
 const router = Router();
 
 //CREATE
-router.post('/', authUser, validate(projectSchema), ProjectController.CreateProject)
+router.post('/', authUser, validateProject, ProjectController.CreateProject)
 
 //READ
 router.get('/:userId?', authUser, ProjectController.GetAllUserProjects);
@@ -18,10 +17,10 @@ router.get('/:userId/all', authUser, ProjectController.GetAllProjects);
 router.get("/:userId/:projectId", authUser, ProjectController.GetProjectById);
 
 //DELETE
-router.delete('/:userId/:projectId', authUser, validate(projectSchema), ProjectController.DeleteProject);
+router.delete('/:userId/:projectId', authUser, validateProject, ProjectController.DeleteProject);
 
 //UPDATE
-router.put('/:projectId', authUser, validate(projectSchema), ProjectController.UpdateProject);
+router.put('/:projectId', authUser, validateProject, ProjectController.UpdateProject);
 
 
 export default router;

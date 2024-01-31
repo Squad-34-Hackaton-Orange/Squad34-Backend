@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express"
-import { Schema } from "yup"
+import projectSchema from "../models/projectValidationSchema"
 
-const validate = (schema: Schema) => async (req: Request, res: Response, next: NextFunction) => {
+const validateProject = async (req: Request, res: Response, next: NextFunction) => {
     try{
-        await schema.validate({
+        await projectSchema.validate({
             body: req.body,
             query: req.query,
             params: req.params
@@ -14,4 +14,4 @@ const validate = (schema: Schema) => async (req: Request, res: Response, next: N
     }
 }
 
-export default validate;
+export default validateProject;
