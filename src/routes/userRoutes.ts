@@ -1,11 +1,12 @@
 import {Router} from "express";
 import { UserController } from "../controllers/UserController";
 import authUser from "../middlewares/authUser";
+import validateUser from "../middlewares/userValidation";
 
 const router = Router();
 
 //CREATE
-router.post('/sign', UserController.CreateUser)
+router.post('/sign', validateUser, UserController.CreateUser)
 router.post('/login', UserController.LoginUser)
 
 // localhost.com:8080/user/sign
@@ -14,7 +15,7 @@ router.post('/login', UserController.LoginUser)
 router.get('/:userId', authUser, UserController.GetUser);
 
 //UPDATE
-router.put('/:userId', authUser, UserController.updateUserById)
+router.put('/:userId', authUser, validateUser, UserController.updateUserById)
 
 //DELETE
 router.delete('/:userId', authUser, UserController.DeleteUserById)

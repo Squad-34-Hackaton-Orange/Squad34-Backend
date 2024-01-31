@@ -75,13 +75,11 @@ export class UserController {
   static async LoginUser(req: Request, res: Response) {
     const { email, password } = req.body;
 
-    console.log(email, password)
-
     try {
       // CHECA SE RECEBEMOS OS DADOS
       if (!email && !password) {
         res.status(400).send({
-          message: "Invalid email or password.",
+          message: "Invalid data.",
         });
 
         return;
@@ -102,7 +100,7 @@ export class UserController {
 
       if (!user) {
         res.status(404).send({
-          message: "User doesn't exist.",
+          message: "Invalid email or password.",
         });
         return;
       }
@@ -111,7 +109,7 @@ export class UserController {
 
       if (!checarSenha) {
         res.status(401).send({
-          message: "Incorrect email or password.",
+          message: "Invalid email or password.",
         });
         return;
       }
