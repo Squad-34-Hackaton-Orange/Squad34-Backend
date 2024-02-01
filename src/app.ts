@@ -8,7 +8,7 @@ const port = 8080;
 
 app.use(express.json())
 dotenv.config()
-app.use(cors())
+app.use(cors({ credentials: true, origin: process.env.NODE_ENV === "dev" ? "http://localhost:3000/" : "url_deploy"}))
 
 app.get("/", (req, res) => {
   res.send("Hello World");
