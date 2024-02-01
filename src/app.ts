@@ -8,7 +8,14 @@ const port = 8080;
 
 app.use(express.json())
 dotenv.config()
-app.use(cors({ credentials: true, origin: process.env.NODE_ENV === "dev" ? "http://localhost:3000/" : "url_deploy"}))
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }))
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
 
 app.get("/", (req, res) => {
   res.send("Hello World");
