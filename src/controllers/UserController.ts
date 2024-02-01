@@ -88,13 +88,7 @@ export class UserController {
       const user = await prisma.user.findFirst({
         where: {
           email,
-        },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          password: true,
-        },
+        }  
       });
 
 
@@ -119,10 +113,10 @@ export class UserController {
 
 
         const token = jwt.sign(
-          { id: user.id.toString(), name: user.name, email: user.email },
+          { id: user.id.toString(), name: user.name, last_name: user.last_name, email: user.email, country: user.country, image: user.image },
           privateKey,
           {
-            expiresIn: "1h",
+            expiresIn: "2h",
           }
         );
 
