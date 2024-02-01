@@ -121,11 +121,6 @@ export class UserController {
         );
 
         res.json({
-          user: {
-            name: user.name,
-            email: user.email,
-            id: user.id,
-          },
           token: token,
         });
       }
