@@ -55,8 +55,6 @@ export class UserController {
           email,
           password: hash,
           createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: new Date(),
         },
       });
 
@@ -94,6 +92,7 @@ export class UserController {
           name: true,
           email: true,
           password: true,
+          deletedAt: true
         },
       });
 
@@ -112,6 +111,11 @@ export class UserController {
           message: "Invalid email or password.",
         });
         return;
+      }
+
+      if(user.deletedAt){
+        res.status(401).send({message: "User has been deleted."})
+        return
       }
 
       if (checarSenha) {
