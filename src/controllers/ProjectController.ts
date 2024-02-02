@@ -47,7 +47,7 @@ export class ProjectController {
     }
 
     static async GetAllUserProjects(req: Request, res: Response): Promise<void> {
-        const { userId } = req.query;
+        const { userId } = req.params;
 
         const user = await prisma.user.findFirst({
             where: {
