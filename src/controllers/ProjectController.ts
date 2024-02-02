@@ -70,7 +70,13 @@ export class ProjectController {
 
     static async GetAllProjects(req: Request, res: Response): Promise<void> {
         try {
-            const projects = await prisma.project.findMany();
+            
+            const projects = await prisma.project.findMany({
+                include: {
+                    user: true
+                }
+            });
+
             res.status(200).json(projects);
         } catch (error) {
             if (error instanceof PrismaError.PrismaClientKnownRequestError) {
