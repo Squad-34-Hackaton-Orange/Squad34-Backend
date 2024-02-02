@@ -46,7 +46,7 @@ export default async function (req: Request, res: Response, next: NextFunction) 
         }
 
         if (userIdFromToken !== userId) {
-            return res.status(403).json({ message: "You don't have permission to update this user" });
+            return res.status(403).json({ message: "You don't have permission." });
         }
 
         next();
