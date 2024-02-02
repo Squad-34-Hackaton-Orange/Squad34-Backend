@@ -11,10 +11,14 @@ router.post('/', authUser, validateProject, ProjectController.CreateProject)
 //READ
 router.get('/:userId?', authUser, ProjectController.GetAllUserProjects);
 
-// READ ALL
+//READ ALL
 router.get('/:userId/all', authUser, ProjectController.GetAllProjects);
 
+//READ BY PROJECT ID
 router.get("/:userId/:projectId", authUser, ProjectController.GetProjectById);
+
+//READ PROJECTS BY TAG
+router.get("/:userId/tag/:tagId", authUser, ProjectController.GetProjectsByTag)
 
 //DELETE
 router.delete('/:userId/:projectId', authUser, validateProject, ProjectController.DeleteProject);
