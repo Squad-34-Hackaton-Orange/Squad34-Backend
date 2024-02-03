@@ -139,6 +139,7 @@ export class UserController {
       const user = await prisma.user.findFirst({
         where: { id: Number(userId) },
         select: {
+          image: true,
           name: true,
           country: true,
           last_name: true,
@@ -148,7 +149,7 @@ export class UserController {
           createdAt: false,
           updatedAt: false,
           deletedAt: false,
-        },
+          },
       });
 
       if (!user) {
