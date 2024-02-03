@@ -6,6 +6,8 @@ export class ProjectController {
         //tags = array containing the tags ids
         const { title, description, link, id_user, tags, image } = req.body;
 
+        console.log(req.body)
+
         //Checking if we haven't received the needed data
         if (!title || !description || !link || !id_user) {
             res.status(400).send({

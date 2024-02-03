@@ -18,7 +18,6 @@ export default async function (
   next: NextFunction
 ) {
 
-    console.log('iniciando autenticação')
 
   const authHeader = req.headers.authorization;
   if (!authHeader) {
@@ -43,7 +42,6 @@ export default async function (
     
     let userId;
 
-
     if (req.params.userId) {
       userId = req.params.userId;
     }
@@ -52,14 +50,15 @@ export default async function (
     if (req.body.id_user) {
       userId = req.body.id_user;
     }
+
     if (req.body.data) {
       userId = req.body.data.id_user;
     } 
 
+
     if (req.query.userId) {         
       userId = req.query.userId;
     }
-
 
 
 

@@ -1,7 +1,7 @@
 import * as yup from "yup"
 
-const projectSchema = yup.object({
-    data: yup.object({
+const projectSchema = yup.object({   
+    body: yup.object({
         title: yup.string()
         .min(2, "Mínimo 2 caracteres")
         .max(50, "Máximo 50 caracteres")
@@ -16,6 +16,7 @@ const projectSchema = yup.object({
         tags: yup.array().of(yup.number().integer("Os ids devem ser números inteiros")),
         id_user: yup.string().required("Campo obrigatório")
     }),
+    
     
     params: yup.object({
         userId: yup.number().optional(),
