@@ -4,7 +4,7 @@ import { prisma, PrismaError } from "../utils/prisma";
 export class ProjectController {
     static async CreateProject(req: Request, res: Response) {
         //tags = array containing the tags ids
-        const { title, description, link, id_user, tags } = req.body;
+        const { title, description, link, id_user, tags, image } = req.body;
 
         //Checking if we haven't received the needed data
         if (!title || !description || !link || !id_user) {
@@ -22,6 +22,7 @@ export class ProjectController {
                     description,
                     link,
                     id_user: Number(id_user),
+                    image
                 },
             });
 
@@ -212,7 +213,7 @@ export class ProjectController {
     static async UpdateProject(req: Request, res: Response) {
         const { projectId } = req.params;
         //updateDate is a boolean that tells if the user wants to update the date_post or not
-        const { title, description, link, updateDate } = req.body;
+        const { title, description, link, image, updateDate } = req.body;
 
         const project = await prisma.project.findUnique({
             where: {
@@ -230,6 +231,7 @@ export class ProjectController {
 
         const updatedProject = {
             date_post: updateDate? new Date() : project.date_post,
+            image: image? image: project.image,
             title: title ? title : project.title,
             description: description ? description : project.description,
             link: link ? link : project.link,

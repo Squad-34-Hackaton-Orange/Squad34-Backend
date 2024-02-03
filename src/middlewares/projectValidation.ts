@@ -2,14 +2,16 @@ import { NextFunction, Request, Response } from "express"
 import projectSchema from "../models/projectValidationSchema"
 
 const validateProject = async (req: Request, res: Response, next: NextFunction) => {
+
+
     try{
         await projectSchema.validate({
-            body: req.body,
+            data: req.body.data,
             query: req.query,
             params: req.params
         })
         next()
-    }catch(err: any){
+    }catch(err: any){        
         res.status(400).send({message: "Invalid data."})
     }
 }

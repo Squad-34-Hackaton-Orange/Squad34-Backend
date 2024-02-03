@@ -20,6 +20,7 @@ export default async function (req: Request, res: Response, next: NextFunction) 
     }
 
 
+
     try {
         const privateKey = getPrivateKey()
 
@@ -35,11 +36,15 @@ export default async function (req: Request, res: Response, next: NextFunction) 
 
         let userId;
 
+
         if (req.params.userId) {
             userId = req.params.userId;
         }
         else if (req.body.id_user) {
             userId = req.body.id_user;
+        }
+        else if (req.body.data.id_user) {
+            userId = req.body.data.id_user;
         }
         else {
             userId = req.query.userId;
