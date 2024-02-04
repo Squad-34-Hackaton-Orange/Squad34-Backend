@@ -9,15 +9,19 @@ const router = Router();
 router.post('/', authUser, validateProject, ProjectController.CreateProject)
 
 //READ
-router.get('/:userId?', authUser, ProjectController.GetAllUserProjects);
+router.get('/:userId?', authUser, ProjectController.GetAllProjects);
 
-// READ ALL
-router.get('/:userId/all', authUser, ProjectController.GetAllProjects);
+//READ ALL
+router.get('/:userId/all', authUser, ProjectController.GetAllUserProjects);
 
+//READ BY PROJECT ID
 router.get("/:userId/:projectId", authUser, ProjectController.GetProjectById);
 
+//READ PROJECTS BY TAG
+router.get("/:userId/tag/:tagId", authUser, ProjectController.GetProjectsByTag)
+
 //DELETE
-router.delete('/:userId/:projectId', authUser, validateProject, ProjectController.DeleteProject);
+router.delete('/:userId/:projectId', authUser, ProjectController.DeleteProject);
 
 //UPDATE
 router.put('/:projectId', authUser, validateProject, ProjectController.UpdateProject);

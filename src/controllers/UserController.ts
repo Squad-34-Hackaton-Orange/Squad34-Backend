@@ -258,4 +258,3 @@ export class UserController {
       throw error;
     }
   }
-}
