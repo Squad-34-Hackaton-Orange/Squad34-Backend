@@ -127,10 +127,9 @@ export class UserController {
           { id: user.id.toString(), name: user.name, email: user.email, image: user.image },
           privateKey,
           {
-            expiresIn: "1h",
+            expiresIn: "2h",
           }
         );
-
         res.json({
           user: {
             name: user.name,
@@ -178,8 +177,6 @@ export class UserController {
             image,
             password: 'ad16hs 6ky1h6 51a165d4a16f165h4r#@$!$f64af46a8d244h64g68sd4f6846h84f68g69wj4l4hjk462nd994',
             createdAt: new Date(),
-            updatedAt: new Date(),
-            deletedAt: new Date(),
           },
         });
     }
@@ -201,6 +198,8 @@ export class UserController {
             expiresIn: "2h",
           }
         );
+
+        console.log(token)
 
         res.json({
           token: token,
