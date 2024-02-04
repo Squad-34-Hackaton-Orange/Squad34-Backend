@@ -55,8 +55,6 @@ export class UserController {
           email,
           password: hash,
           createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: new Date(),
         },
       });
 
@@ -88,7 +86,14 @@ export class UserController {
       const user = await prisma.user.findFirst({
         where: {
           email,
-        }  
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          password: true,
+          deletedAt: true
+        },
       });
 
 
@@ -108,19 +113,29 @@ export class UserController {
         return;
       }
 
+      if(user.deletedAt){
+        res.status(401).send({message: "User has been deleted."})
+        return
+      }
+
       if (checarSenha) {
         const privateKey = getPrivateKey();
 
 
         const token = jwt.sign(
-          { id: user.id.toString(), name: user.name, last_name: user.last_name, email: user.email, country: user.country, image: user.image },
+          { id: user.id.toString(), name: user.name, email: user.email },
           privateKey,
           {
-            expiresIn: "2h",
+            expiresIn: "1h",
           }
         );
 
         res.json({
+          user: {
+            name: user.name,
+            email: user.email,
+            id: user.id,
+          },
           token: token,
         });
       }
@@ -204,7 +219,6 @@ export class UserController {
       const user = await prisma.user.findFirst({
         where: { id: Number(userId) },
         select: {
-          image: true,
           name: true,
           country: true,
           last_name: true,
@@ -214,7 +228,7 @@ export class UserController {
           createdAt: false,
           updatedAt: false,
           deletedAt: false,
-          },
+        },
       });
 
       if (!user) {
