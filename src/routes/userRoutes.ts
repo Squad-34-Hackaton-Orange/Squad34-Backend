@@ -8,6 +8,7 @@ const router = Router();
 //CREATE
 router.post('/sign', validateUser, UserController.CreateUser)
 router.post('/login', UserController.LoginUser)
+router.post('/google/login', UserController.HandleUserGoogle)
 
 // localhost.com:8080/user/sign
 

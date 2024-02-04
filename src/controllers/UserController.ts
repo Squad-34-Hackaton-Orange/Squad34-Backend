@@ -133,6 +133,71 @@ export class UserController {
     }
   }
 
+  static async HandleUserGoogle(req: Request, res: Response) {
+    const { name, last_name, email, image } = req.body;
+
+    console.log('up')
+    console.log(req.body)
+
+    if (!name || !last_name || !email) {
+      res.status(400).send({
+        message: "Invalid Data",
+      });
+
+      return;
+    }
+    
+
+    const checkUserExist = await prisma.user.findFirst({
+      where: {
+        email,
+      },      
+    });
+
+    if(!checkUserExist){
+      console.log('criando conta')
+      
+        await prisma.user.create({
+          data: {
+            name,
+            last_name,
+            email,
+            image,
+            password: 'ad16hs 6ky1h6 51a165d4a16f165h4r#@$!$f64af46a8d244h64g68sd4f6846h84f68g69wj4l4hjk462nd994',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            deletedAt: new Date(),
+          },
+        });
+    }
+
+    const novoUser = !checkUserExist&& await prisma.user.findFirst({
+      where: {
+        email,
+      },      
+    });
+
+    if (novoUser) {
+      const privateKey = getPrivateKey();
+
+
+        const token = jwt.sign(
+          { id: novoUser.id.toString(), name: novoUser.name, last_name: novoUser.last_name, email: novoUser.email, country: novoUser.country, image: novoUser.image },
+          privateKey,
+          {
+            expiresIn: "2h",
+          }
+        );
+        console.log('retornando token')
+
+        res.json({
+          token: token,
+        });
+
+      return;
+    }
+  }
+
   static async GetUser(req: Request, res: Response) {
     try {
       const { userId } = req.params;
