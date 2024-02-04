@@ -13,7 +13,7 @@ datasource db {
 
 model User {
   id        Int       @id @default(autoincrement())
-  image String @default("")
+  image     String    @default("")
   name      String    @db.VarChar(100)
   last_name String    @db.VarChar(100)
   email     String    @unique @db.VarChar(255)
@@ -27,7 +27,7 @@ model User {
 
 model Project {
   id          Int          @id @default(autoincrement())
-  image String @default("")
+  image       String       @default("")
   date_post   DateTime     @default(now())
   title       String       @db.VarChar(100)
   description String       @db.VarChar(500)
@@ -47,7 +47,7 @@ model ProjectTag {
   id_project Int
   id_tag     Int
 
-  project Project @relation(fields: [id_project], references: [id])
+  project Project @relation(fields: [id_project], references: [id], onDelete: Cascade)
   tag     Tag     @relation(fields: [id_tag], references: [id])
 
   @@id([id_project, id_tag])
