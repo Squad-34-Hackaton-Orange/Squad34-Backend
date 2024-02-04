@@ -92,7 +92,8 @@ export class UserController {
           name: true,
           email: true,
           password: true,
-          deletedAt: true
+          deletedAt: true,
+          image: true
         },
       });
 
@@ -123,7 +124,7 @@ export class UserController {
 
 
         const token = jwt.sign(
-          { id: user.id.toString(), name: user.name, email: user.email },
+          { id: user.id.toString(), name: user.name, email: user.email, image: user.image },
           privateKey,
           {
             expiresIn: "1h",
@@ -151,8 +152,6 @@ export class UserController {
   static async HandleUserGoogle(req: Request, res: Response) {
     const { name, last_name, email, image } = req.body;
 
-    console.log('up')
-    console.log(req.body)
 
     if (!name || !last_name || !email) {
       res.status(400).send({
@@ -170,7 +169,6 @@ export class UserController {
     });
 
     if(!checkUserExist){
-      console.log('criando conta')
       
         await prisma.user.create({
           data: {
@@ -186,7 +184,7 @@ export class UserController {
         });
     }
 
-    const novoUser = !checkUserExist&& await prisma.user.findFirst({
+    const novoUser = await prisma.user.findFirst({
       where: {
         email,
       },      
@@ -203,7 +201,6 @@ export class UserController {
             expiresIn: "2h",
           }
         );
-        console.log('retornando token')
 
         res.json({
           token: token,
