@@ -18,6 +18,8 @@ router.get('/:userId', authUser, UserController.GetUser);
 //UPDATE
 router.put('/:userId', authUser, validateUser, UserController.updateUserById)
 
+router.put('/:userId/image', authUser, UserController.updateUserById)
+
 //DELETE
 router.delete('/:userId', authUser, UserController.DeleteUserById)
 

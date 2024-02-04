@@ -3,6 +3,7 @@ import userSchema from "../models/userValidationSchema"
 
 const validateUser = async (req: Request, res: Response, next: NextFunction) => {
     try{
+        console.log(req.body)
 
         let signUp
         if(req.body.password) signUp = true

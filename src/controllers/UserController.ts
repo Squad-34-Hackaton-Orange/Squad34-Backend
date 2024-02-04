@@ -7,7 +7,9 @@ import { getPrivateKey } from "../middlewares/authUser";
 
 export class UserController {
   static async CreateUser(req: Request, res: Response) {
+
     const { name, last_name, email, password } = req.body;
+
 
     if (!name || !last_name || !email || !password) {
       res.status(400).send({
@@ -90,6 +92,7 @@ export class UserController {
         select: {
           id: true,
           name: true,
+          last_name: true,
           email: true,
           password: true,
           deletedAt: true,
@@ -124,7 +127,7 @@ export class UserController {
 
 
         const token = jwt.sign(
-          { id: user.id.toString(), name: user.name, email: user.email, image: user.image },
+          { id: user.id.toString(), name: user.name, email: user.email, last_name: user.last_name, image: user.image },
           privateKey,
           {
             expiresIn: "2h",
@@ -199,7 +202,6 @@ export class UserController {
           }
         );
 
-        console.log(token)
 
         res.json({
           token: token,
@@ -248,7 +250,7 @@ export class UserController {
 
   static async updateUserById(req: Request, res: Response): Promise<void> {
     const { userId } = req.params;
-    const { name, last_name, email, country } = req.body;
+    const { name, last_name, email, country, image } = req.body;
 
     const getUser = await prisma.user.findUnique({
       where: { id: Number(userId) },
@@ -266,6 +268,7 @@ export class UserController {
       last_name: last_name ? last_name : getUser.last_name,
       email: email ? email : getUser.email,
       country: country ? country : getUser.country,
+      image: image? image : getUser.image,
       updatedAt: new Date(),
     };
 
