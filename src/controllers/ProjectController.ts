@@ -16,6 +16,10 @@ export class ProjectController {
             return;
         }
 
+        //Converting timezone to Brasilia time
+        const nowDate = new Date()
+        nowDate.setHours(nowDate.getHours() - 3)
+
         try {
             const project = await prisma.project.create({
                 data: {
@@ -23,7 +27,8 @@ export class ProjectController {
                     description,
                     link,
                     id_user: Number(id_user),
-                    image
+                    image,
+                    date_post: nowDate.toISOString()
                 },
             });
 
@@ -230,8 +235,12 @@ export class ProjectController {
             return;
         }
 
+        //Converting timezone to Brasilia time
+        const newDate = new Date()
+        newDate.setHours(newDate.getHours() - 3)
+
         const updatedProject = {
-            date_post: updateDate? new Date() : project.date_post,
+            date_post: updateDate ? newDate.toISOString() : project.date_post,
             image: image? image: project.image,
             title: title ? title : project.title,
             description: description ? description : project.description,
