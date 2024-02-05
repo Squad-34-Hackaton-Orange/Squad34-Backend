@@ -8,6 +8,8 @@ const validateProject = async (
 ) => {
   try {
 
+    console.log('validate project ',req.body)
+
     await projectSchema.validate({
       body: req.body,
       query: req.query,

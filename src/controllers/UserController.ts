@@ -8,6 +8,9 @@ import { getPrivateKey } from "../middlewares/authUser";
 export class UserController {
   static async CreateUser(req: Request, res: Response) {
 
+    console.log('criar usuario ',req.body)
+
+
     const { name, last_name, email, password } = req.body;
 
 
@@ -63,6 +66,7 @@ export class UserController {
       res.status(201).send({
         message: "User Created Successfully.",
       });
+      return;
     } catch (error) {
       if (error instanceof PrismaError.PrismaClientKnownRequestError) {
         res.status(500).send(error);
@@ -133,6 +137,7 @@ export class UserController {
             expiresIn: "2h",
           }
         );
+        console.log(token)
         res.status(200).json({
           user: {
             name: user.name,
@@ -282,6 +287,7 @@ export class UserController {
       res.status(200).send({
         message: "User Updated Sucessfully.",
       });
+      return;
     } catch (error) {
       res.status(500).send({
         message: "User Update Error.",

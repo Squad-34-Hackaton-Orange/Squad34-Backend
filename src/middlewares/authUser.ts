@@ -18,7 +18,7 @@ export default async function (
   next: NextFunction
 ) {
 
-
+  console.log('authUser ',req.body)
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     return res.status(401).json({ message: "No token provided" });
