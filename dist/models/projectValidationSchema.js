@@ -38,6 +38,7 @@ const projectSchema = yup.object({
             .url("Deve ser uma URL válida")
             .required("Campo obrigatório"),
         tags: yup.array().of(yup.number().integer("Os ids devem ser números inteiros")),
+        date_post: yup.date(),
         id_user: yup.string().required("Campo obrigatório")
     }),
     params: yup.object({

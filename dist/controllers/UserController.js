@@ -51,6 +51,9 @@ class UserController {
                 });
             }
             // CRIAÇÃO NO BANCO DE DADOS
+            //Converting timezone to Brasilia time
+            const brasiliaTime = new Date();
+            brasiliaTime.setHours(brasiliaTime.getHours() - 3);
             try {
                 yield prisma_1.prisma.user.create({
                     data: {
@@ -58,7 +61,7 @@ class UserController {
                         last_name,
                         email,
                         password: hash,
-                        createdAt: new Date(),
+                        createdAt: brasiliaTime.toISOString(),
                     },
                 });
                 res.status(201).send({
@@ -241,13 +244,16 @@ class UserController {
                 });
                 return;
             }
+            //Converting timezone to Brasilia time
+            const newDateUser = new Date();
+            newDateUser.setHours(newDateUser.getHours() - 3);
             const updatedUser = {
                 name: name ? name : getUser.name,
                 last_name: last_name ? last_name : getUser.last_name,
                 email: email ? email : getUser.email,
                 country: country ? country : getUser.country,
                 image: image ? image : getUser.image,
-                updatedAt: new Date(),
+                updatedAt: newDateUser.toISOString(),
             };
             try {
                 yield prisma_1.prisma.user.update({
@@ -278,10 +284,13 @@ class UserController {
                 });
                 return;
             }
+            //Converting timezone to Brasilia time
+            const deletedUserDate = new Date();
+            deletedUserDate.setHours(deletedUserDate.getHours() - 3);
             try {
                 yield prisma_1.prisma.user.update({
                     where: { id: Number(userId) },
-                    data: { deletedAt: new Date() },
+                    data: { deletedAt: deletedUserDate.toISOString() },
                 });
                 res.status(200).send({
                     message: "User Deleted Successfully.",
