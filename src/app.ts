@@ -10,7 +10,7 @@ const port = 8080;
 app.use(express.json())
 dotenv.config()
 
-app.use(cors({ credentials: true, origin: "https://orangeportfolio.vercel.app/" }))
+app.use(cors({ credentials: true, origin: "https://orangeportfolio.vercel.app" }))
 app.use(corsConfig)
 
 app.get("/", (req, res) => {
