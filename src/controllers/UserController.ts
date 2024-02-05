@@ -133,7 +133,7 @@ export class UserController {
             expiresIn: "2h",
           }
         );
-        res.json({
+        res.status(200).json({
           user: {
             name: user.name,
             email: user.email,
@@ -142,6 +142,7 @@ export class UserController {
           token: token,
         });
       }
+      return;
     } catch (error) {
       if (error instanceof PrismaError.PrismaClientKnownRequestError) {
         res.status(500).send({ message: "Internal Error." });
@@ -203,7 +204,7 @@ export class UserController {
         );
 
 
-        res.json({
+        res.status(200).json({
           token: token,
         });
 

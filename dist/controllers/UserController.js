@@ -118,7 +118,7 @@ class UserController {
                     const token = jsonwebtoken_1.default.sign({ id: user.id.toString(), name: user.name, email: user.email, last_name: user.last_name, image: user.image }, privateKey, {
                         expiresIn: "2h",
                     });
-                    res.json({
+                    res.status(200).json({
                         user: {
                             name: user.name,
                             email: user.email,
@@ -127,6 +127,7 @@ class UserController {
                         token: token,
                     });
                 }
+                return;
             }
             catch (error) {
                 if (error instanceof prisma_1.PrismaError.PrismaClientKnownRequestError) {
@@ -172,7 +173,7 @@ class UserController {
                 const token = jsonwebtoken_1.default.sign({ id: novoUser.id.toString(), name: novoUser.name, last_name: novoUser.last_name, email: novoUser.email, country: novoUser.country, image: novoUser.image }, privateKey, {
                     expiresIn: "2h",
                 });
-                res.json({
+                res.status(200).json({
                     token: token,
                 });
                 return;
