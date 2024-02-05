@@ -22,7 +22,7 @@ const getPrivateKey = () => {
 };
 exports.getPrivateKey = getPrivateKey;
 function default_1(req, res, next) {
-    var _a;
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         console.log('authUser ', req.body);
         const authHeader = req.headers.authorization;
@@ -30,12 +30,12 @@ function default_1(req, res, next) {
             return res.status(401).json({ message: "No token provided" });
         }
         try {
-            const privateKey = (0, exports.getPrivateKey)();
-            const token = (_a = req.header("Authorization")) === null || _a === void 0 ? void 0 : _a.replace("Bearer ", "");
+            const PRIVATE_KEY = (_a = process.env.PRIVATE_KEY) !== null && _a !== void 0 ? _a : '';
+            const token = (_b = req.header("Authorization")) === null || _b === void 0 ? void 0 : _b.replace("Bearer ", "");
             if (!token) {
                 return res.status(401).json({ message: "The token wasn't provided" });
             }
-            const decoded = jsonwebtoken_1.default.verify(token, privateKey);
+            const decoded = jsonwebtoken_1.default.verify(token, PRIVATE_KEY);
             const userIdFromToken = decoded.id;
             let userId;
             if (req.params.userId) {

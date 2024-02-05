@@ -27,7 +27,7 @@ export default async function (
 
 
   try {
-    const privateKey = getPrivateKey();
+    const PRIVATE_KEY: Secret = process.env.PRIVATE_KEY ?? '';
 
     const token = req.header("Authorization")?.replace("Bearer ", "");
 
@@ -35,7 +35,7 @@ export default async function (
       return res.status(401).json({ message: "The token wasn't provided" });
     }
 
-    const decoded = jwt.verify(token, privateKey) as JwtPayload;
+    const decoded = jwt.verify(token, PRIVATE_KEY) as JwtPayload;
 
 
     const userIdFromToken = decoded.id;
