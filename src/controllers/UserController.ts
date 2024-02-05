@@ -125,9 +125,12 @@ export class UserController {
         res.status(401).send({message: "User has been deleted."})
         return
       }
+      console.log('senha correta? ', checarSenha)
 
       if (checarSenha) {
         const privateKey = getPrivateKey();
+
+        console.log('privatekey ', checarSenha)
 
 
         const token = jwt.sign(
@@ -137,7 +140,7 @@ export class UserController {
             expiresIn: "2h",
           }
         );
-        console.log(token)
+        console.log('token', token)
         res.status(200).json({
           user: {
             name: user.name,

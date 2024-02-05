@@ -115,12 +115,14 @@ class UserController {
                     res.status(401).send({ message: "User has been deleted." });
                     return;
                 }
+                console.log('senha correta? ', checarSenha);
                 if (checarSenha) {
                     const privateKey = (0, authUser_1.getPrivateKey)();
+                    console.log('privatekey ', checarSenha);
                     const token = jsonwebtoken_1.default.sign({ id: user.id.toString(), name: user.name, email: user.email, last_name: user.last_name, image: user.image }, privateKey, {
                         expiresIn: "2h",
                     });
-                    console.log(token);
+                    console.log('token', token);
                     res.status(200).json({
                         user: {
                             name: user.name,
