@@ -11,8 +11,8 @@ const origin = process.env.CORS_ORIGIN
 app.use(express.json())
 dotenv.config()
 
-app.use(cors({ credentials: true, origin: origin }))
 app.use(corsConfig)
+app.use(cors({ credentials: true, origin: origin }))
 
 app.get("/", (req, res) => {
   res.send("Hello World");
