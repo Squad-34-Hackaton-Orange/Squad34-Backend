@@ -16,6 +16,7 @@ exports.getPrivateKey = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const fs_1 = __importDefault(require("fs"));
 const getPrivateKey = () => {
+    console.log('iniciando Private Key gerador');
     const PRIVATE_KEY = fs_1.default.readFileSync("./.env", "utf8");
     return PRIVATE_KEY;
 };

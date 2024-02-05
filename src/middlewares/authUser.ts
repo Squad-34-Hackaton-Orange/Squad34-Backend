@@ -7,6 +7,7 @@ export interface CustomRequest extends Request {
 }
 
 export const getPrivateKey = () => {
+  console.log('iniciando Private Key gerador')
   const PRIVATE_KEY: Secret = fs.readFileSync("./.env", "utf8");
 
   return PRIVATE_KEY;

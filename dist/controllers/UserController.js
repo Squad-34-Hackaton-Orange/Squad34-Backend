@@ -17,6 +17,8 @@ const prisma_1 = require("../utils/prisma");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const authUser_1 = require("../middlewares/authUser");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 class UserController {
     static CreateUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -74,6 +76,7 @@ class UserController {
         });
     }
     static LoginUser(req, res) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const { email, password } = req.body;
             try {
@@ -117,9 +120,10 @@ class UserController {
                 }
                 console.log('senha correta? ', checarSenha);
                 if (checarSenha) {
-                    const privateKey = (0, authUser_1.getPrivateKey)();
-                    console.log('privatekey ', checarSenha);
-                    const token = jsonwebtoken_1.default.sign({ id: user.id.toString(), name: user.name, email: user.email, last_name: user.last_name, image: user.image }, privateKey, {
+                    //@tsignore
+                    const PRIVATE_KEY = (_a = process.env.PRIVATE_KEY) !== null && _a !== void 0 ? _a : '';
+                    console.log('privatekey ', PRIVATE_KEY);
+                    const token = jsonwebtoken_1.default.sign({ id: user.id.toString(), name: user.name, email: user.email, last_name: user.last_name, image: user.image }, PRIVATE_KEY, {
                         expiresIn: "2h",
                     });
                     console.log('token', token);

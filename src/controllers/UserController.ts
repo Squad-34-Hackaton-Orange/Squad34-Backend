@@ -2,14 +2,17 @@ import { Request, Response, NextFunction } from "express";
 import { PrismaError, prisma } from "../utils/prisma";
 import bcrypt from "bcrypt";
 
-import jwt from "jsonwebtoken";
+import jwt, { Secret } from "jsonwebtoken";
 import { getPrivateKey } from "../middlewares/authUser";
+import dotenv from 'dotenv';
+
+dotenv.config()
 
 export class UserController {
   static async CreateUser(req: Request, res: Response) {
 
+    
     console.log('criar usuario ',req.body)
-
 
     const { name, last_name, email, password } = req.body;
 
@@ -128,14 +131,16 @@ export class UserController {
       console.log('senha correta? ', checarSenha)
 
       if (checarSenha) {
-        const privateKey = getPrivateKey();
+        //@tsignore
+        const PRIVATE_KEY: Secret = process.env.PRIVATE_KEY ?? '';
 
-        console.log('privatekey ', checarSenha)
+
+        console.log('privatekey ', PRIVATE_KEY)
 
 
         const token = jwt.sign(
           { id: user.id.toString(), name: user.name, email: user.email, last_name: user.last_name, image: user.image },
-          privateKey,
+          PRIVATE_KEY,
           {
             expiresIn: "2h",
           }
