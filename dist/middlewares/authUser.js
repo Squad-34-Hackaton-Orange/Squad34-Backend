@@ -23,6 +23,7 @@ exports.getPrivateKey = getPrivateKey;
 function default_1(req, res, next) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
+        console.log('authUser ', req.body);
         const authHeader = req.headers.authorization;
         if (!authHeader) {
             return res.status(401).json({ message: "No token provided" });

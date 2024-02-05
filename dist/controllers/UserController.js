@@ -20,6 +20,7 @@ const authUser_1 = require("../middlewares/authUser");
 class UserController {
     static CreateUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('criar usuario ', req.body);
             const { name, last_name, email, password } = req.body;
             if (!name || !last_name || !email || !password) {
                 res.status(400).send({
@@ -62,6 +63,7 @@ class UserController {
                 res.status(201).send({
                     message: "User Created Successfully.",
                 });
+                return;
             }
             catch (error) {
                 if (error instanceof prisma_1.PrismaError.PrismaClientKnownRequestError) {
@@ -118,6 +120,7 @@ class UserController {
                     const token = jsonwebtoken_1.default.sign({ id: user.id.toString(), name: user.name, email: user.email, last_name: user.last_name, image: user.image }, privateKey, {
                         expiresIn: "2h",
                     });
+                    console.log(token);
                     res.status(200).json({
                         user: {
                             name: user.name,
@@ -244,6 +247,7 @@ class UserController {
                 res.status(200).send({
                     message: "User Updated Sucessfully.",
                 });
+                return;
             }
             catch (error) {
                 res.status(500).send({

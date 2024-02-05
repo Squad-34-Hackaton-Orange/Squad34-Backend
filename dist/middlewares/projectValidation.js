@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const projectValidationSchema_1 = __importDefault(require("../models/projectValidationSchema"));
 const validateProject = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log('validate project ', req.body);
         yield projectValidationSchema_1.default.validate({
             body: req.body,
             query: req.query,
