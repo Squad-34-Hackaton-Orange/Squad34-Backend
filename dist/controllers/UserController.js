@@ -16,7 +16,6 @@ exports.UserController = void 0;
 const prisma_1 = require("../utils/prisma");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const authUser_1 = require("../middlewares/authUser");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 class UserController {
@@ -147,8 +146,10 @@ class UserController {
         });
     }
     static HandleUserGoogle(req, res) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const { name, last_name, email, image } = req.body;
+            console.log('email', email);
             if (!name || !last_name || !email) {
                 res.status(400).send({
                     message: "Invalid Data",
@@ -160,6 +161,7 @@ class UserController {
                     email,
                 },
             });
+            console.log('user Existe? ', checkUserExist);
             if (!checkUserExist) {
                 yield prisma_1.prisma.user.create({
                     data: {
@@ -177,11 +179,13 @@ class UserController {
                     email,
                 },
             });
+            console.log('User no BD ', novoUser);
             if (novoUser) {
-                const privateKey = (0, authUser_1.getPrivateKey)();
-                const token = jsonwebtoken_1.default.sign({ id: novoUser.id.toString(), name: novoUser.name, last_name: novoUser.last_name, email: novoUser.email, country: novoUser.country, image: novoUser.image }, privateKey, {
+                const PRIVATE_KEY = (_a = process.env.PRIVATE_KEY) !== null && _a !== void 0 ? _a : '';
+                const token = jsonwebtoken_1.default.sign({ id: novoUser.id.toString(), name: novoUser.name, last_name: novoUser.last_name, email: novoUser.email, country: novoUser.country, image: novoUser.image }, PRIVATE_KEY, {
                     expiresIn: "2h",
                 });
+                console.log('TOKEN: ', token);
                 res.status(200).json({
                     token: token,
                 });

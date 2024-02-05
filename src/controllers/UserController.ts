@@ -169,6 +169,7 @@ export class UserController {
     const { name, last_name, email, image } = req.body;
 
 
+    console.log('email', email)
     if (!name || !last_name || !email) {
       res.status(400).send({
         message: "Invalid Data",
@@ -183,6 +184,8 @@ export class UserController {
         email,
       },      
     });
+
+    console.log('user Existe? ', checkUserExist)
 
     if(!checkUserExist){
       
@@ -204,17 +207,21 @@ export class UserController {
       },      
     });
 
+    console.log('User no BD ', novoUser)
+
     if (novoUser) {
-      const privateKey = getPrivateKey();
+      const PRIVATE_KEY: Secret = process.env.PRIVATE_KEY ?? '';
 
 
         const token = jwt.sign(
           { id: novoUser.id.toString(), name: novoUser.name, last_name: novoUser.last_name, email: novoUser.email, country: novoUser.country, image: novoUser.image },
-          privateKey,
+          PRIVATE_KEY,
           {
             expiresIn: "2h",
           }
         );
+
+        console.log('TOKEN: ', token)
 
 
         res.status(200).json({
