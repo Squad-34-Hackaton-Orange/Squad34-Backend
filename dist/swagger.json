@@ -1,0 +1,446 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Orange Juice Portfólio API (Squad 34)",
+        "description": "Essa API tem como objetivo a manipulação de usuários e projetos da plataforma Orange Juice Portfólio. ATENÇÃO: Para testar as rotas corretamente, primeiro crie um usuário na rota /user/sign, depois realizar o login na rota /user/login, copiar o token retornado e colar na aba authorize. Obrigado!",
+        "version": "1.1"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080"
+        }
+    ],
+    "paths": {
+        "/user/sign": {
+            "post": {
+                "summary": "Cadastro de usuário",
+                "description": "Essa rota é responsável por cadastrar um novo usuário.",
+                "tags": ["Users"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "name": "João",
+                                        "last_name": "Oliveira",
+                                        "email": "joaooliveira@email.com",
+                                        "password": "joao123."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": { "description": "Invalid Data" },
+                    "409": { "description": "User Already Exist." },
+                    "500": { "description": "Internal Server Error." },
+                    "201": { "description": "User Created Successfully." }
+                }
+            }
+        },
+        "/user/login": {
+            "post": {
+                "summary": "Login de usuário",
+                "description": "Essa rota é responsável por fazer o login do usuário.",
+                "tags": ["Users"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "email": "joaooliveira@email.com",
+                                        "password": "joao123."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": { "description": "Invalid data." },
+                    "401": { "description": "Invalid email or password." },
+                    "404": { "description": "Invalid email or password." },
+                    "500": { "description": "Internal Server Error" },
+                    "200": { "description": "OK.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{userId}": {
+            "get": {
+                "summary": "Recuperar um usuário",
+                "description": "Essa rota é responsável por fazer a recuperação de um usuário.",
+                "tags": ["Users"],
+                "security": [{ "bearerAuth": [] }],
+                "parameters": [{
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID do usuário.",
+                        "required": "true"
+                    }],
+                "responses": {
+                    "404": { "description": "User not found." },
+                    "500": { "description": "Internal Server Error." },
+                    "200": { "description": "OK.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Apagar um usuário",
+                "description": "Essa rota é responsável por fazer a deleção de um usuário.",
+                "tags": ["Users"],
+                "security": [{ "bearerAuth": [] }],
+                "parameters": [{
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID do usuário.",
+                        "required": "true"
+                    }],
+                "responses": {
+                    "404": { "description": "User not found." },
+                    "500": { "description": "User Deleted Error." },
+                    "200": { "description": "User Deleted Successfully." }
+                }
+            },
+            "put": {
+                "summary": "Atualizar um usuário",
+                "description": "Essa rota é responsável por fazer a atualização de um usuário.",
+                "tags": ["Users"],
+                "security": [{ "bearerAuth": [] }],
+                "parameters": [{
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID do usuário.",
+                        "required": "true"
+                    }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User",
+                                "country": { "type": "string" }
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "name": "João Lucas",
+                                        "last_name": "Oliveira dos Santos",
+                                        "email": "joaodossantos@email.com",
+                                        "country": "Brasil"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "404": { "description": "User not found." },
+                    "500": { "description": "User update error." },
+                    "200": { "description": "User Updated Sucessfully." }
+                }
+            }
+        },
+        "/project": {
+            "post": {
+                "summary": "Cadastro de projeto",
+                "description": "Essa rota é responsável por fazer o cadastro do projeto.",
+                "tags": ["Projects"],
+                "security": [{ "bearerAuth": [] }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Project"
+                            },
+                            "examples": {
+                                "project": {
+                                    "value": {
+                                        "title": "Meu primeiro site",
+                                        "description": "Meu primeiro site desenvolvido com HTML, CSS e Javascript.",
+                                        "link": "https://meuprimeirosite.com.br",
+                                        "tags": [1, 3],
+                                        "id_user": "5"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": { "description": "Invalid Data." },
+                    "500": { "description": "Internal Server Error" },
+                    "201": { "description": "Project Created Successfully." }
+                }
+            },
+            "get": {
+                "summary": "Recuperar todos projetos cadastrados",
+                "description": "Essa rota é responsável por fazer a recuperação de todos os projetos cadastrados.",
+                "tags": ["Projects"],
+                "security": [{ "bearerAuth": [] }],
+                "parameters": [{
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID do usuário.",
+                        "required": "true"
+                    }],
+                "responses": {
+                    "404": { "description": "User doesn't exist." },
+                    "500": { "description": "Internal Server Error." },
+                    "200": { "description": "OK.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Project"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/project/{userId}/all": {
+            "get": {
+                "summary": "Recuperar todos os projetos do usuário",
+                "description": "Essa rota é responsável por fazer a recuperação de todos os projetos do usuário.",
+                "tags": ["Projects"],
+                "parameters": [{
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID do usuário.",
+                        "required": "true"
+                    }],
+                "security": [{ "bearerAuth": [] }],
+                "responses": {
+                    "500": { "description": "Internal Server Error." },
+                    "200": { "description": "OK.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Project"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/project/{userId}/tag/{tagId}": {
+            "get": {
+                "summary": "Recuperar todos os projetos do usuário pela tag",
+                "description": "Essa rota é responsável por fazer a recuperação de todos os projetos do usuário de acordo com a tag.",
+                "tags": ["Projects"],
+                "security": [{ "bearerAuth": [] }],
+                "parameters": [{
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID do projeto.",
+                        "required": "true"
+                    },
+                    {
+                        "name": "tagId",
+                        "in": "path",
+                        "description": "ID da tag.",
+                        "required": "true"
+                    }],
+                "responses": {
+                    "404": { "description": "Project not found." },
+                    "500": { "description": "Internal Server Error." },
+                    "200": { "description": "OK.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Project"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/project/{userId}/{projectId}": {
+            "get": {
+                "summary": "Recuperar um projeto do usuário.",
+                "description": "Essa rota é responsável por fazer a recuperação de um projeto específico do usuário.",
+                "tags": ["Projects"],
+                "parameters": [{
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID do usuário.",
+                        "required": "true"
+                    },
+                    { "name": "projectId",
+                        "in": "path",
+                        "description": "ID do projeto.",
+                        "required": "true" }],
+                "security": [{ "bearerAuth": [] }],
+                "responses": {
+                    "404": { "description": "Project not found." },
+                    "500": { "description": "Internal Server Error." },
+                    "200": { "description": "OK.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Project"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Excluir um projeto do usuário.",
+                "description": "Essa rota é responsável por fazer a deleção de um projeto específico do usuário.",
+                "tags": ["Projects"],
+                "parameters": [{
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID do usuário.",
+                        "required": "true"
+                    },
+                    { "name": "projectId",
+                        "in": "path",
+                        "description": "ID do projeto.",
+                        "required": "true" }],
+                "security": [{ "bearerAuth": [] }],
+                "responses": {
+                    "404": { "description": "Project not found." },
+                    "500": { "description": "Internal Server Error." },
+                    "200": { "description": "Project Deleted." }
+                }
+            }
+        },
+        "/project/{projectId}": {
+            "put": {
+                "summary": "Atualização de projeto",
+                "description": "Essa rota é responsável por fazer a atualização de um projeto.",
+                "tags": ["Projects"],
+                "security": [{ "bearerAuth": [] }],
+                "parameters": [{
+                        "name": "projectId",
+                        "in": "path",
+                        "description": "ID do projeto.",
+                        "required": "true"
+                    }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Project"
+                            },
+                            "examples": {
+                                "project": {
+                                    "value": {
+                                        "title": "Meu novo site",
+                                        "description": "Meu novo site desenvolvido com HTML, CSS e Javascript.",
+                                        "link": "https://meunovosite.com.br",
+                                        "id_user": "5"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "404": { "description": "Project not found." },
+                    "500": { "description": "Internal Server Error." },
+                    "200": { "description": "Project Updated Sucessfully." }
+                }
+            }
+        },
+        "/tag": {
+            "get": {
+                "summary": "Recuperar todas as tags",
+                "description": "Essa rota é responsável por fazer a recuperação de todas as tags.",
+                "tags": ["Tags"],
+                "security": [{ "bearerAuth": [] }],
+                "parameters": [{
+                        "name": "userId",
+                        "in": "query",
+                        "description": "ID do usuário.",
+                        "required": "true"
+                    }],
+                "responses": {
+                    "500": { "description": "Internal Server Error." },
+                    "200": { "description": "OK.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "id": { "type": "number" },
+                                    "$ref": "#/components/schemas/Tag"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "name": { "type": "string" },
+                    "last_name": { "type": "string" },
+                    "email": { "type": "string" },
+                    "password": { "type": "string" },
+                    "country": { "type": "string" }
+                }
+            },
+            "Project": {
+                "type": "object",
+                "properties": {
+                    "title": { "type": "string" },
+                    "description": { "type": "string" },
+                    "link": { "type": "string" },
+                    "date_post": { "type": "string" },
+                    "tags": { "type": "array" },
+                    "id_user": { "type": "number" }
+                }
+            },
+            "Tag": {
+                "type": "object",
+                "properties": {
+                    "name": { "type": "string" }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
